@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --accent-color: #3498db;
+        --text-color: #333;
+        --border-radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: #f8fafc;
+        margin: 0;
+        padding: 2rem;
+        color: var(--text-color);
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #fff;
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+
+      h3 {
+        color: var(--primary-color);
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .logout {
+        float: right;
+        background: #e74c3c;
+        color: white;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+      }
+
+      .logout:hover {
+        background: #c0392b;
+      }
+
+      .section {
+        margin-bottom: 3rem;
+      }
+
+      .contact-section {
+        position: relative;
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .search-bar input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .search-bar input:focus {
+        border-color: var(--accent-color);
+        outline: none;
+      }
+
+      .export-btn {
+        background: var(--accent-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+      }
+
+      .export-btn:hover {
+        background: #2980b9;
+      }
+
+      form input,
+      form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      form input:focus,
+      form textarea:focus {
+        border-color: var(--accent-color);
+        outline: none;
+      }
+
+      form textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      form button {
+        background: var(--accent-color);
+        color: white;
+        padding: 0.75rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s;
+      }
+
+      form button:hover {
+        background: #2980b9;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      th {
+        background: #f4f6f8;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      td a {
+        color: #e74c3c;
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-right: 10px;
+      }
+
+      td a:hover {
+        text-decoration: underline;
+      }
+
+      .reply-link {
+        color: var(--accent-color);
+      }
+
+      .status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        color: white;
+      }
+
+      .status-pending {
+        background: #f39c12;
+      }
+
+      .status-resolved {
+        background: #2ecc71;
+      }
+
+      .reply-form {
+        display: none;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f4f6f8;
+        border-radius: var(--border-radius);
+      }
+
+      .reply-form.active {
+        display: block;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        .container {
+          padding: 1.5rem;
+        }
+
+        .search-bar {
+          flex-direction: column;
+        }
+
+        .export-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Welcome Admin</h2>
+      <a href="{{ url_for('admin_logout') }}" class="logout">Logout</a>
+
+      <div class="section">
+        <h3>Services</h3>
+        <form method="POST" action="{{ url_for('add_service') }}">
+          <input
+            type="text"
+            name="title"
+            placeholder="Service Title"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Service Description"
+            required
+          ></textarea>
+          <button type="submit">Add Service</button>
+        </form>
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+          {% for s in services %}
+          <tr>
+            <td>{{ s.title }}</td>
+            <td>{{ s.description }}</td>
+            <td><a href="{{ url_for('delete_service', id=s.id) }}">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <div class="section">
+        <h3>Projects</h3>
+        <form method="POST" action="{{ url_for('add_project') }}">
+          <input
+            type="text"
+            name="title"
+            placeholder="Project Title"
+            required
+          />
+          <input
+            type="link"
+            name="link"
+            placeholder="Project Link"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Project Description"
+            required
+          ></textarea>
+          <button type="submit">Add Project</button>
+        </form>
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Link</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+          {% for p in projects %}
+          <tr>
+            <td>{{ p.title }}</td>
+            <td>{{ p.link }}</td>
+            <td>{{ p.description }}</td>
+            <td><a href="{{ url_for('delete_project', id=p.id) }}">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <div class="section contact-section">
+        <h3>Contact Messages</h3>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="search"
+            placeholder="Search by name or email..."
+            oninput="searchContacts()"
+          />
+          <button class="export-btn" onclick="exportContacts()">Export to CSV</button>
+        </div>
+        <form method="POST" action="{{ url_for('add_contact_response') }}" id="contactForm">
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+          />
+          <textarea
+            name="message"
+            placeholder="Message"
+            required
+          ></textarea>
+          <button type="submit">Add Message</button>
+        </form>
+        <table id="contactTable">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          {% for c in contacts %}
+          <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.message }}</td>
+            <td>
+              <span class="status status-{{ c.status|lower }}">{{ c.status }}</span>
+            </td>
+            <td>
+              <a href="#" class="reply-link" onclick="toggleReplyForm({{ c.id }})">Reply</a>
+              <a href="{{ url_for('delete_contact', id=c.id) }}">Delete</a>
+            </td>
+          </tr>
+          <tr id="reply-form-{{ c.id }}" class="reply-form">
+            <td colspan="5">
+              <form method="POST" action="{{ url_for('reply_contact', id=c.id) }}" onsubmit="hideReplyForm({{ c.id }})">
+                <textarea
+                  name="reply_message"
+                  placeholder="Type your reply..."
+                  required
+                ></textarea>
+                <button type="submit">Send Reply</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function toggleReplyForm(contactId) {
+        const replyForm = document.getElementById(`reply-form-${contactId}`);
+        replyForm.classList.toggle("active");
+      }
+
+      function hideReplyForm(contactId) {
+        const replyForm = document.getElementById(`reply-form-${contactId}`);
+        replyForm.classList.remove("active");
+      }
+
+      function searchContacts() {
+        const searchValue = document.getElementById('search').value.toLowerCase();
+        const rows = document.querySelectorAll('#contactTable tr');
+        
+        rows.forEach(row => {
+          const name = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+          const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+          if (name.includes(searchValue) || email.includes(searchValue)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      function exportContacts() {
+        const rows = document.querySelectorAll('#contactTable tr');
+        let csvContent = "Name,Email,Message,Status\n";
+
+        rows.forEach(row => {
+          const columns = row.querySelectorAll('td');
+          if (columns.length > 0) {
+            csvContent += Array.from(columns).map(col => col.textContent.trim()).join(',') + "\n";
+          }
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'contacts.csv';
+        link.click();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Rohit Sagar Sutar - Web Developer and Resume Writer Portfolio" />
+    <meta name="keywords" content="Rohit Sagar, Portfolio, Web Developer, Resume, Flask, Python" />
+    <meta name="author" content="Rohit Sutar" />
+    <meta property="og:title" content="Rohit Sagar Sutar | Portfolio" />
+    <meta property="og:description" content="Creative Web Developer & Resume Writer Portfolio" />
+    <meta property="og:image" content="/static/img/og-image.png" />
+    <meta property="og:type" content="website" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rohit Sagar Sutar | Portfolio</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-content">
+        <h1 class="animated fade-in">
+          Hi, I'm <span class="highlight">Rohit Sagar Sutar</span>
+        </h1>
+        <p class="subtitle">Web Developer</p>
+        <div class="social-links">
+          <a href="https://linkedin.com/in/rohit-sutar-79097132b" target="_blank">LinkedIn</a>
+          <a href="https://github.com/RoCode146/" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="about" id="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <p class="about-text">
+                I'm a Computer Science student with a passion for building useful, real-world web applications. With hands-on experience in Python Flask,
+          HTML, CSS, and MySQL, I've created functional projects like Taskify. Along with web development, I help professionals create compelling
+          resumes that land interviews.
+        </p>
+        <div class="skills-grid">
+          <div class="skill-card">Python Flask</div>
+          <div class="skill-card">HTML/CSS</div>
+          <div class="skill-card">JavaScript</div>
+          <div class="skill-card">MySQL</div>
+          <div class="skill-card">Resume Writing</div>
+          <div class="skill-card">UI Animation</div>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <div class="resume">
+        <div class="left">
+          <h2>Contact</h2>
+          <p>📧 rohitsutar1611@gmail.com</p>
+          <p>📞 9637433091</p>
+          <p>
+            <a href="https://linkedin.com/in/rohit-sutar-79097132b">🔗 LinkedIn</a>
+          </p>
+          <p><a href="https://github.com/RoCode146">💻 GitHub</a></p>
+
+          <h2>Skills</h2>
+          <div class="skills">
+            <span>Python Flask</span>
+            <span>HTML/CSS</span>
+            <span>JavaScript</span>
+            <span>MySQL</span>
+            <span>UI Animation</span>
+            <span>Resume Writing</span>
+            <span>Jinja tamplateting</span>
+            <span>Python django</span>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="name-title">
+            <h1>ROHIT SAGAR SUTAR</h1>
+            <h3>Web Developer</h3>
+          </div>
+
+          <div class="sec">
+            <h2>Professional Summary</h2>
+            <p>
+              Creative and passionate Computer Science graduate with strong
+              skills in web development and resume writing. Proven ability to
+              create real-world web applications using Flask, HTML, CSS,
+              JavaScript, and MySQL. Dedicated to helping individuals present
+              themselves professionally with compelling resumes.
+            </p>
+          </div>
+
+          <div class="sec">
+            <h2>Projects</h2>
+            <ul>
+              <li>
+                <strong>TimeBloom:</strong> : A vibrant age calculator that transforms your birthdate into a beautiful timeline of life.
+              </li>
+              <li>
+                <strong>TaskPulse:</strong> : : Simplify your productivity with a smart, elegant task tracker.
+              </li>
+            </ul>
+          </div>
+
+          <div class="sec">
+            <h2>Education</h2>
+            <p>B.Sc. Computer Science – Gopal Krishna Gokhale College, 2025</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects" id="projects">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-list">
+          {% for project in projects %}
+          <div class="project-card reveal">
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.description }}</p>
+            <a href="{{ project.link }}" target="_blank" class="project-link">View Project</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="container">
+        <h2 class="section-title">Services</h2>
+        <div class="services-grid">
+          {% for service in services %}
+          <div class="service-card reveal">
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact Me</h2>
+        <form action="/contact" method="POST" class="contact-form">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+          <button type="submit" class="send-button">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; {{ now.year }} Rohit Sagar Sutar. Made with 💖 using Flask.</p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+  </body>
+</html>
